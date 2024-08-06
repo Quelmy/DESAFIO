@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Fornecedor/Produto</title>
+    <link rel="stylesheet" type="text/css" href="/style-guide/css/fluig-style-guide.min.css">
+    <link rel="stylesheet" href="/assests/css/styles.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"> <!-- jQuery UI CSS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> <!-- jQuery UI -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/4.2.0/mustache.min.js"></script> <!-- Mustache -->
+    <script src="/style-guide/js/fluig-style-guide.min.js"></script>
+    <style>
+        /* Modal de Loading */
+        .modal {
+            display: none; /* Oculta o modal por padrão */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5); /* Cor de fundo semi-transparente */
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            text-align: center;
+        }
+
+        .modal .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .modal .close:hover,
+        .modal .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="fluig-style-guide">
+        <div class="container">
+            <h1>Cadastro Fornecedor/Produto</h1>
+            <form id="supplierForm">
+                <h2 class="section-title">Informações do Fornecedor</h2>
+                <fieldset class="fieldset-with-background">
+                    <div class="form-group">
+                        <div class="form-field smaller-input">
+                            <label for="razaoSocial">Razão Social *</label>
+                            <input type="text" id="razaoSocial" name="razaoSocial" class="fluig-input" required>
+                        </div>
+                        <div class="form-field smaller-input">
+                            <label for="cnpj">CNPJ *</label>
+                            <input type="text" id="cnpj" name="cnpj" class="fluig-input" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-field smaller-input">
+                            <label for="nomeFantasia">Nome Fantasia *</label>
+                            <input type="text" id="nomeFantasia" name="nomeFantasia" class="fluig-input" required>
+                        </div>
+                        <div class="form-field smaller-input">
+                            <label for="inscricaoEstadual">Inscrição Estadual</label>
+                            <input type="text" id="inscricaoEstadual" name="inscricaoEstadual" class="fluig-input">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-field smaller-input">
+                            <label for="cep">CEP</label>
+                            <input type="text" id="cep" name="cep" class="fluig-input">
+                        </div>
+                        <div class="form-field smaller-input">
+                            <label for="inscricaoMunicipal">Inscrição Municipal</label>
+                            <input type="text" id="inscricaoMunicipal" name="inscricaoMunicipal" class="fluig-input">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-field smaller-input">
+                            <label for="endereco">Endereço *</label>
+                            <input type="text" id="endereco" name="endereco" class="fluig-input" required readonly>
+                        </div>
+                        <div class="form-field smaller-input">
+                            <label for="numero">Número *</label>
+                            <input type="text" id="numero" name="numero" class="fluig-input" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-field full-width">
+                            <label for="complemento">Complemento</label>
+                            <input type="text" id="complemento" name="complemento" class="fluig-input">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-field one-third-width">
+                            <label for="bairro">Bairro *</label>
+                            <input type="text" id="bairro" name="bairro" class="fluig-input" required>
+                        </div>
+                        <div class="form-field one-third-width">
+                            <label for="municipio">Município *</label>
+                            <input type="text" id="municipio" name="municipio" class="fluig-input" required>
+                        </div>
+                        <div class="form-field one-third-width">
+                            <label for="estado">Estado *</label>
+                            <input type="text" id="estado" name="estado" class="fluig-input" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-field smaller-input one-third-width">
+                            <label for="nomeContato">Nome da Pessoa de Contato *</label>
+                            <input type="text" id="nomeContato" name="nomeContato" class="fluig-input" required>
+                        </div>
+                        <div class="form-field smaller-input one-third-width">
+                            <label for="telefone">Telefone *</label>
+                            <input type="text" id="telefone" name="telefone" class="fluig-input" required>
+                        </div>
+                        <div class="form-field smaller-input one-third-width">
+                            <label for="email">E-mail *</label>
+                            <input type="email" id="email" name="email" class="fluig-input" required>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <h2 class="section-title">Produtos</h2>
+                <fieldset class="fieldset-with-background">
+                    <div id="products">
+                        <fieldset class="product-fieldset">
+                            <div class="form-group">
+                                <div class="form-field full-width">
+                                    <label for="produto-1-nome">Produto 1 *</label>
+                                    <input type="text" id="produto-1-nome" name="produto-1-nome" class="fluig-input" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-field one-fourth-width">
+                                    <label for="produto-1-unidade">UND. Medida *</label>
+                                    <select id="produto-1-unidade" name="produto-1-unidade" class="fluig-select" required>
+                                        <option value="unidade">Unidade</option>
+                                        <option value="kg">Kg</option>
+                                        <option value="litro">Litro</option>
+                                    </select>
+                                </div>
+                                <div class="form-field one-fourth-width">
+                                    <label for="produto-1-quantidade">QTD. em Estoque *</label>
+                                    <input type="number" id="produto-1-quantidade" name="produto-1-quantidade" class="fluig-input" required>
+                                </div>
+                                <div class="form-field one-fourth-width">
+                                    <label for="produto-1-valor-unitario">Valor Unitário *</label>
+                                    <input type="number" id="produto-1-valor-unitario" name="produto-1-valor-unitario" class="fluig-input" required>
+                                </div>
+                                <div class="form-field one-fourth-width">
+                                    <label for="produto-1-valor-total">Valor Total</label>
+                                    <input type="number" id="produto-1-valor-total" name="produto-1-valor-total" class="fluig-input" readonly>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="product-fieldset">
+                            <div class="form-group">
+                                <div class="form-field full-width">
+                                    <label for="produto-2-nome">Produto 2 *</label>
+                                    <input type="text" id="produto-2-nome" name="produto-2-nome" class="fluig-input" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-field one-fourth-width">
+                                    <label for="produto-2-unidade">UND. Medida *</label>
+                                    <select id="produto-2-unidade" name="produto-2-unidade" class="fluig-select" required>
+                                        <option value="unidade">Unidade</option>
+                                        <option value="kg">Kg</option>
+                                        <option value="litro">Litro</option>
+                                    </select>
+                                </div>
+                                <div class="form-field one-fourth-width">
+                                    <label for="produto-2-quantidade">QTD. em Estoque *</label>
+                                    <input type="number" id="produto-2-quantidade" name="produto-2-quantidade" class="fluig-input" required>
+                                </div>
+                                <div class="form-field one-fourth-width">
+                                    <label for="produto-2-valor-unitario">Valor Unitário *</label>
+                                    <input type="number" id="produto-2-valor-unitario" name="produto-2-valor-unitario" class="fluig-input" required>
+                                </div>
+                                <div class="form-field one-fourth-width">
+                                    <label for="produto-2-valor-total">Valor Total</label>
+                                    <input type="number" id="produto-2-valor-total" name="produto-2-valor-total" class="fluig-input" readonly>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <button type="button" id="addProduct">Adicionar Produto</button>
+                </fieldset>
+
+                <h2 class="section-title">Anexos</h2>
+                <fieldset class="fieldset-with-background">
+                    <div id="attachments">
+                        <div class="form-group">
+                            <div class="form-field">
+                                <label for="documento-anexo-1">Documento Anexo 1</label>
+                                <input type="file" id="documento-anexo-1" name="documento-anexo-1" class="fluig-input">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="addAttachment">Adicionar Anexo</button>
+                </fieldset>
+
+                <button type="submit" class="fluig-button">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Loading -->
+    <div id="loadingModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Enviando dados...</p>
+        </div>
+    </div>
+
+    <script src="/assests/js/scripts.js"></script>
+</body>
+</html>
